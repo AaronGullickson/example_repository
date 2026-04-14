@@ -1,0 +1,111 @@
+---
+title: "Wage Data Analysis"
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    toc: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+source(here("check_packages.R"))
+load(here("data", "data_constructed", "earnings.RData"))
+```
+
+# Examine gender gap in wages
+
+What is the overall gap?
+
+```{r}
+#| label: tbl-wages-gender
+#| tbl-cap: Summary of hourly wages distribution by gender
+
+earnings |>
+  group_by(gender) |>
+  summarize(wages_mean = mean(wages),
+            wages_median = median(wages),
+            wages_sd = sd(wages),
+            .groups = "drop") |>
+  gt() |>
+  cols_label(wages_mean ~ "mean", wages_median ~ "median", wages_sd ~ "sd") |>
+  tab_spanner(columns = starts_with("wages_"), label = "Hourly Wages") |>
+  fmt_currency(columns = starts_with("wages_"))
+```
+
+What is the gap by education?
+
+```{r}
+#| label: fig-gender-educ
+#| fig-cap: Gender wage gap by highest degree earned. Line range shows 95% confidence interval for each estimate.
+
+earnings |>
+  group_by(gender, education) |>
+  summarize(wages_mean = mean(wages),
+            wages_sd = sd(wages),
+            wages_n = n(),
+            .groups = "drop") |>
+  pivot_wider(names_from = gender, values_from = starts_with("wages_")) |>
+  mutate(diff = wages_mean_Female - wages_mean_Male,
+         se = sqrt(wages_sd_Male^2 / wages_n_Male +
+                     wages_sd_Female^2 / wages_n_Female),
+         low = diff - 1.96 * se, 
+         high = diff + 1.96 * se) |>
+  ggplot(aes(x = education, y = diff))+
+  geom_point()+
+  geom_linerange(aes(ymin = low, ymax = high))+
+  coord_flip()+
+  scale_y_continuous(labels = scales::dollar)+
+  labs(x = NULL, y = "gender wage gap")+
+  theme_bw()
+```
+
+
+## Models
+
+Lets put this into some models where we can control for things.
+
+```{r}
+#| label: tbl-model-wages
+#| tbl-cap: Linear models predcicting hourly wages
+
+model1 <- lm(wages ~ gender, data = earnings)
+model2 <- update(model1, .~. + education)
+model3 <- update(model2, .~. + gender*education)
+model4 <- update(model3, .~. + race + marstat + nchild + foreign_born + 
+                   I(age - mean(age)) + I((age - mean(age))^2))
+
+modelsummary(list(model1, model2, model3, model4),
+             stars = TRUE, output = "gt", gof_map = c("r.squared", "nobs"),
+             notes = "Standard errors shown in parenthesis")
+```
+
+Ok, it seems like the results are pretty robust to controls, but a bit hard to read. Lets calculate average marginal effects across groups from the models with and without controls.
+
+```{r}
+#| label: fig-model-diff
+#| fig-cap: Gender wage gap by highest degree earned based on linear models with and without control variables. Line range shows 95% confidence interval for each estimate.
+
+ame_model3 <- avg_slopes(model3, variables = "gender", by = "education") |>
+  as_tibble() |>
+  mutate(model = "No controls")
+
+ame_model4 <- avg_slopes(model4, variables = "gender", by = "education") |>
+  as_tibble() |>
+  mutate(model = "Full controls")
+
+bind_rows(ame_model3, ame_model4) |>
+  ggplot(aes(x = education, y = estimate, color = model))+
+  geom_point(position = position_dodge(0.5))+
+  geom_linerange(position = position_dodge(0.5), 
+                 aes(ymin = conf.low, ymax = conf.high))+
+  coord_flip()+
+  scale_y_continuous(labels = scales::dollar)+
+  labs(x = NULL, y = "gender wage gap")+
+  theme_bw()
+
+```
+

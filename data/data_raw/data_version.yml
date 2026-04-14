@@ -1,0 +1,16 @@
+#############################################
+# data_version.yml
+#
+# This file can be used to track data version for projects where data 
+# will be accessed from external sources, such as Google Drive. In such
+# cases, the organize_data.qmd can be used to download the data to each 
+# collaborator's local machine. However, to avoid re-downloading the data, 
+# each collaborator can be made to track which version of the data they
+# have and this version can be checked against the "official" version here
+# which will indicate whether they need to re-download the data. See the 
+# example code chunk in analysis/organize_data.qmd for how it can be used.
+##############################################
+
+# any consistent string will work for version (e.g. date, v1, v2, uuid)
+version: 'v1'
+description: 'The latest version of fake wage data'
