@@ -75,7 +75,7 @@ Lets put this into some models where we can control for things.
 #| tbl-cap: Linear models predcicting hourly wages
 
 model1 <- lm(wages ~ gender, data = earnings)
-model2 <- update(model1, .~. + education + earn_type)
+model2 <- update(model1, .~. + education + occup + earn_type)
 model3 <- update(model2, .~. + gender*education)
 model4 <- update(model3, .~. + race + marstat + nchild + foreign_born + 
                    I(age - mean(age)) + I((age - mean(age))^2))
