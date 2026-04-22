@@ -62,7 +62,7 @@ earnings |>
   coord_flip()+
   scale_y_continuous(labels = scales::dollar)+
   labs(x = NULL, y = "gender wage gap")+
-  theme_bw()
+  theme_minimal()
 ```
 
 
@@ -107,7 +107,7 @@ bind_rows(ame_model3, ame_model4) |>
   coord_flip()+
   scale_y_continuous(labels = scales::dollar)+
   labs(x = NULL, y = "gender wage gap")+
-  theme_bw()
+  theme_minimal()
 
 ```
 
