@@ -16,6 +16,16 @@ source(here("check_packages.R"))
 load(here("data", "data_constructed", "earnings.RData"))
 ```
 
+```{r}
+#| label: custom-theme
+
+theme_mine <- theme_bw()+
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 14),
+        axis.title = element_text(size = 16))
+
+```
+
 # Examine gender gap in wages
 
 What is the overall gap?
