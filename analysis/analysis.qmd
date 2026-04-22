@@ -57,7 +57,7 @@ earnings |>
          low = diff - 1.96 * se, 
          high = diff + 1.96 * se) |>
   ggplot(aes(x = education, y = diff))+
-  geom_point()+
+  geom_point(color = "red")+
   geom_linerange(aes(ymin = low, ymax = high))+
   coord_flip()+
   scale_y_continuous(labels = scales::dollar)+
