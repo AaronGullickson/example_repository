@@ -23,7 +23,6 @@ theme_mine <- theme_bw()+
   theme(legend.position = "bottom",
         axis.text = element_text(size = 14),
         axis.title = element_text(size = 16))
-
 ```
 
 # Examine gender gap in wages
@@ -70,7 +69,7 @@ earnings |>
   coord_flip()+
   scale_y_continuous(labels = scales::dollar)+
   labs(x = NULL, y = "gender wage gap")+
-  theme_bw()
+  theme_mine
 ```
 
 
@@ -115,7 +114,7 @@ bind_rows(ame_model3, ame_model4) |>
   coord_flip()+
   scale_y_continuous(labels = scales::dollar)+
   labs(x = NULL, y = "gender wage gap")+
-  theme_bw()
+  theme_mine
 
 ```
 
