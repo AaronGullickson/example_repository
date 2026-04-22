@@ -29,9 +29,11 @@ earnings |>
   summarize(wages_mean = mean(wages),
             wages_median = median(wages),
             wages_sd = sd(wages),
+            wages_iqr = IQR(wages),
             .groups = "drop") |>
   gt() |>
-  cols_label(wages_mean ~ "mean", wages_median ~ "median", wages_sd ~ "sd") |>
+  cols_label(wages_mean ~ "mean", wages_median ~ "median", wages_sd ~ "sd",
+             wages_iqr ~ "IQR") |>
   tab_spanner(columns = starts_with("wages_"), label = "Hourly Wages") |>
   fmt_currency(columns = starts_with("wages_"))
 ```
