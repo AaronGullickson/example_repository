@@ -4,6 +4,8 @@ editor: visual
 
 This repository contains a small research project written in R and Quarto. The repository will be used as a demonstration repository for the *Using Version Control for Data Analysis through GitHub* course by [Statistical Horizons](https://statisticalhorizons.com/). The project uses fake, but realistic, data to look at wage differences between men and women in the US by educational level.
 
+Here is a change!
+
 ## Pre-Course Preparation
 
 All participants should complete the following activities prior to the beginning of the course. All software that you need to install is free.
@@ -26,5 +28,5 @@ There is no longer a binary installer for git on MacOS, but there are still seve
 2.  Use [homebrew](https://brew.sh/) to install git. This is the geeky solution and will require you to:
     1.  Install homebrew. You can do this from the command line following the instructions on the homepage or your you can download the [latest package installer](https://github.com/Homebrew/brew/releases).
     2.  On your Mac, open a Terminal window (found in Applications/Utilities) and type in `brew install git`. This will install git on your system.
-  
+
 This is a test commit!
